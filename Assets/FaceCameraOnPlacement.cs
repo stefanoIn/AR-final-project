@@ -2,14 +2,29 @@ using UnityEngine;
 
 public class FaceCamera : MonoBehaviour
 {
-    public Camera arCamera;
+    private Camera arCamera;
+
+    void Start()
+    {
+        arCamera = Camera.main;
+
+        if (arCamera == null)
+        {
+            Debug.LogWarning("[AR-MUSEUM][FaceCamera] Camera.main NOT found");
+        }
+        else
+        {
+            Debug.Log("[AR-MUSEUM][FaceCamera] Camera.main assigned");
+        }
+    }
 
     void LateUpdate()
     {
-        if (!arCamera) return;
+        if (!arCamera)
+            return;
 
         Vector3 direction = arCamera.transform.position - transform.position;
-        direction.y = 0f; // keep character upright
+        direction.y = 0f;
 
         if (direction.sqrMagnitude > 0.001f)
         {

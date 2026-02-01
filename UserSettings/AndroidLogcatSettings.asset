@@ -1,0 +1,189 @@
+{
+    "m_SelectedDeviceId": "R58NB1HP6CE",
+    "m_SelectedProcess": {
+        "deviceId": "R58NB1HP6CE",
+        "name": "it.unige.ar.museum",
+        "processId": 10215,
+        "exited": false
+    },
+    "m_SelectedPriority": 0,
+    "m_KnownProcessesForSerialization": [
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 24943,
+            "exited": true
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 25877,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 26808,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 27993,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 29287,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 30074,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 32084,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 1679,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 2938,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 5816,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 7209,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 7917,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 8849,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 10215,
+            "exited": false
+        }
+    ],
+    "m_Tags": {
+        "m_Entries": [
+            {
+                "m_Name": "Filter by all listed tags",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "No Filter",
+                "m_Selected": true
+            },
+            {
+                "m_Name": "",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "Tag Control...",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "Unity",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "CRASH",
+                "m_Selected": false
+            }
+        ]
+    },
+    "m_ExtraWindowState": {
+        "Type": 0,
+        "Height": 0.0
+    },
+    "m_MemoryViewerState": {
+        "MemoryWindowWidth": 170.0,
+        "MemoryTypeEnabled": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+        ],
+        "MemoryGroup": 2,
+        "AutoCapture": true
+    },
+    "m_FilterOptions": {
+        "m_Filter": "[AR",
+        "m_UseRegularExpressions": false,
+        "m_MatchCase": true
+    },
+    "m_SymbolPaths": [],
+    "m_CaptureVideoSettings": {
+        "TimeLimitEnabled": false,
+        "TimeLimit": 180,
+        "VideoSizeEnabled": false,
+        "VideoSizeX": 1280,
+        "VideoSizeY": 720,
+        "BitRateEnabled": false,
+        "BitRateK": 20000,
+        "DisplayIdEnabled": false,
+        "DisplayId": ""
+    },
+    "m_ScreenCaptureSettings": {
+        "Mode": 0,
+        "m_LastSaveLocation": [
+            "C:\\Users\\Stefano\\Desktop\\FinalS5211120",
+            "C:\\Users\\Stefano\\Desktop\\FinalS5211120"
+        ]
+    },
+    "m_QueryLayoutSettings": {
+        "LastLayoutSaveLocation": "",
+        "LastScreenshotSaveLocation": ""
+    },
+    "m_InputSettings": {
+        "ShiftModifier": false,
+        "SendText": "",
+        "PosixKillSignal": 0,
+        "TargetProcess": {
+            "deviceId": "",
+            "name": "",
+            "processId": 0,
+            "exited": false
+        }
+    },
+    "m_AutoScroll": 0
+}
