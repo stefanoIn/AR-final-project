@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig>
+  <Tracking>
+    <ImageTarget name="schinkel_mittelalterliche_stadt_an_einem_fluss_anagoria" size="1.000000 0.656250" />
+    <ImageTarget name="wilhelm_alexander_wolfgang_von_kobell_001" size="1.000000 0.666146" />
+    <ImageTarget name="william_holman_hunt_the_hireling_shepherd" size="1.000000 0.697500" />
+    <ImageTarget name="vincent_van_gogh_cafeterras_bij_nacht" size="1.000000 1.245833" />
+    <ImageTarget name="john_constable_the_hay_wain" size="1.000000 0.689583" />
+    <ImageTarget name="john_constable_salisbury_cathedral_from_the_bishops_grounds" size="1.000000 0.778338" />
+    <ImageTarget name="gustave_caillebotte_paris_street_rainy_day" size="1.000000 0.757292" />
+    <ImageTarget name="el_greco_view_of_toledo" size="1.000000 1.128646" />
+    <ImageTarget name="botticellivenus" size="1.000000 0.628125" />
+    <ImageTarget name="albrecht_altdorfer_schlacht_bei_issus" size="1.000000 1.306771" />
+  </Tracking>
+</QCARConfig>
