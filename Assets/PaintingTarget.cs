@@ -32,30 +32,13 @@ public class PaintingTarget : MonoBehaviour
             Debug.LogError($"[AR-MUSEUM][Painting:{targetKey}] router reference is NULL");
     }
 
-    private void OnEnable()
-    {
-        Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] ENABLED");
-    }
-
-    private void OnDisable()
-    {
-        Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] DISABLED");
-    }
-
     // =============================
     // IMAGE TARGET EVENTS
     // =============================
 
-    /// Called from DefaultObserverEventHandler → On Target Found
     public void OnTargetFound()
     {
         Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] OnTargetFound");
-
-        if (router == null)
-        {
-            Debug.LogError($"[AR-MUSEUM][Painting:{targetKey}] Router is NULL");
-            return;
-        }
 
         router.SetCurrentTarget(this);
 
@@ -66,96 +49,87 @@ public class PaintingTarget : MonoBehaviour
         }
     }
 
-    /// Called from DefaultObserverEventHandler → On Target Lost
     public void OnTargetLost()
     {
         Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] OnTargetLost");
 
         if (isPlaced && spawnedInstance != null)
-        {
             spawnedInstance.SetActive(false);
-        }
 
-        if (router != null)
-        {
-            router.ClearCurrentTarget(this);
-        }
+        router.ClearCurrentTarget(this);
     }
 
     // =============================
     // PLACEMENT
     // =============================
 
-    /// Called ONLY by PlacementRouter after plane placement.
-   public void PlaceAt(Transform anchor)
+    /// Called ONLY by PlacementRouter after plane placement
+    public void PlaceAt(Transform anchor)
     {
         Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] PlaceAt CALLED");
 
-        if (anchor == null)
-        {
-            Debug.LogError($"[AR-MUSEUM][Painting:{targetKey}] Anchor is NULL");
+        if (anchor == null || isPlaced)
             return;
-        }
 
-        if (isPlaced)
-        {
-            Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] Already placed — skipping");
-            return;
-        }
-
-        if (characterPrefab == null)
-        {
-            Debug.LogError($"[AR-MUSEUM][Painting:{targetKey}] Character Prefab is NULL");
-            return;
-        }
-
-        Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] Instantiating prefab: {characterPrefab.name}");
-
+        // Instantiate
         spawnedInstance = Instantiate(characterPrefab);
         spawnedInstance.name = characterPrefab.name + "_Instance";
 
-        // 1️⃣ Parent FIRST (important for correct transforms)
+        // Parent to anchor
         spawnedInstance.transform.SetParent(anchor, false);
 
-        // 2️⃣ Reset local transform
+        // Reset local transform
         spawnedInstance.transform.localPosition = Vector3.zero;
         spawnedInstance.transform.localRotation = Quaternion.identity;
         spawnedInstance.transform.localScale = Vector3.one;
 
-        // 3️⃣ Drop character so feet touch the ground
-        Renderer[] renderers = spawnedInstance.GetComponentsInChildren<Renderer>();
-        if (renderers.Length > 0)
+        // =============================
+        // 🔴 CORE FIX: CAMERA-RELATIVE → FLOOR-RELATIVE
+        // =============================
+
+        float anchorY = anchor.position.y;
+
+        // Compensate for camera-relative ground plane
+        spawnedInstance.transform.position += Vector3.up * anchorY;
+
+        // =============================
+        // DEBUG LOGS (PLACEMENT)
+        // =============================
+
+        Debug.Log($"[AR-MUSEUM][Placement] Anchor world position: {anchor.position}");
+        Debug.Log($"[AR-MUSEUM][Placement] Character world position: {spawnedInstance.transform.position}");
+
+        // =============================
+        // OPTIONAL: Speech / Bubble debug
+        // =============================
+
+        Transform bubble = spawnedInstance.transform.Find("SpeechBubble");
+        if (bubble != null)
         {
-            Bounds bounds = renderers[0].bounds;
-            foreach (var r in renderers)
-                bounds.Encapsulate(r.bounds);
-
-            float bottomY = bounds.min.y;
-            float offset = anchor.position.y - bottomY;
-
-            spawnedInstance.transform.position += Vector3.up * offset;
-
-            Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] Ground offset applied: {offset}");
+            Debug.Log($"[AR-MUSEUM][Placement] Bubble world position: {bubble.position}");
+            Debug.Log($"[AR-MUSEUM][Placement] Bubble local position: {bubble.localPosition}");
         }
         else
         {
-            Debug.LogWarning($"[AR-MUSEUM][Painting:{targetKey}] No Renderer found for grounding");
+            Debug.LogWarning($"[AR-MUSEUM][Placement] No SpeechBubble found on {spawnedInstance.name}");
         }
 
-        // 4️⃣ Face camera (Y only)
+        // =============================
+        // Face camera (Y only)
+        // =============================
+
         Camera cam = Camera.main;
         if (cam != null)
         {
-            Vector3 lookDir = cam.transform.position - spawnedInstance.transform.position;
-            lookDir.y = 0f;
+            Vector3 dir = cam.transform.position - spawnedInstance.transform.position;
+            dir.y = 0f;
 
-            if (lookDir.sqrMagnitude > 0.001f)
-                spawnedInstance.transform.rotation = Quaternion.LookRotation(lookDir);
+            if (dir.sqrMagnitude > 0.001f)
+                spawnedInstance.transform.rotation = Quaternion.LookRotation(dir);
         }
 
         isPlaced = true;
 
         Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] Placement COMPLETE");
     }
-
 }

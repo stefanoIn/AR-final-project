@@ -3,7 +3,7 @@
     "m_SelectedProcess": {
         "deviceId": "R58NB1HP6CE",
         "name": "it.unige.ar.museum",
-        "processId": 23010,
+        "processId": 22424,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -102,6 +102,66 @@
             "deviceId": "R58NB1HP6CE",
             "name": "it.unige.ar.museum",
             "processId": 23010,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 1691,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 9478,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 11753,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 16063,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 16235,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 16962,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 17674,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 20420,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 24610,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 22424,
             "exited": false
         }
     ],
