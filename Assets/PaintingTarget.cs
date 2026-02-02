@@ -12,7 +12,7 @@ public class PaintingTarget : MonoBehaviour
     private GameObject spawnedInstance;
     private bool isPlaced = false;
 
-    // 🔒 Store final world transform
+    // Store final world transform
     private Vector3 placedWorldPosition;
     private Quaternion placedWorldRotation;
 
@@ -37,7 +37,7 @@ public class PaintingTarget : MonoBehaviour
         {
             spawnedInstance.SetActive(true);
 
-            // 🔁 Restore saved transform
+            //  Restore saved transform
             spawnedInstance.transform.position = placedWorldPosition;
             spawnedInstance.transform.rotation = placedWorldRotation;
 
@@ -75,7 +75,7 @@ public class PaintingTarget : MonoBehaviour
         spawnedInstance.transform.localPosition = Vector3.zero;
         spawnedInstance.transform.localRotation = Quaternion.identity;
 
-        // 🔓 DETACH — critical fix
+        // DETACH 
         spawnedInstance.transform.SetParent(null, true);
 
         // Save final world transform

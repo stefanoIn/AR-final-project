@@ -3,7 +3,7 @@
     "m_SelectedProcess": {
         "deviceId": "R58NB1HP6CE",
         "name": "it.unige.ar.museum",
-        "processId": 19257,
+        "processId": 19888,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -252,6 +252,12 @@
             "deviceId": "R58NB1HP6CE",
             "name": "it.unige.ar.museum",
             "processId": 19257,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 19888,
             "exited": false
         }
     ],
