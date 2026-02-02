@@ -423,7 +423,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PaintingTarget
   targetKey: homanHunt
-  characterPrefab: {fileID: 6320959806251677168, guid: e9f19723f3443bf40beebe7221f38543, type: 3}
+  characterPrefab: {fileID: 8627741643876580519, guid: a362eb1e7b6fffb41bed5cce90e9f2dd, type: 3}
   router: {fileID: 657795295}
 --- !u!114 &47182627
 MonoBehaviour:
@@ -1959,7 +1959,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PaintingTarget
   targetKey: elgreco
-  characterPrefab: {fileID: 7954526838005877273, guid: 5c3b5d86bb4d1ba449d742f81b6ae4f0, type: 3}
+  characterPrefab: {fileID: 8627741643876580519, guid: 9469acb327a57444aa98506479f4ed98, type: 3}
   router: {fileID: 657795295}
 --- !u!43 &1493412828
 Mesh:
@@ -2598,7 +2598,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PaintingTarget
   targetKey: botticelli
-  characterPrefab: {fileID: 7954526838005877273, guid: ca3396d08d9b435478e82c36ff2ed6af, type: 3}
+  characterPrefab: {fileID: 8627741643876580519, guid: 7171486c386999341be60f2ae91d71cf, type: 3}
   router: {fileID: 657795295}
 --- !u!1 &1820834200
 GameObject:
