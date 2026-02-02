@@ -87,7 +87,7 @@ public class PaintingTarget : MonoBehaviour
     // =============================
 
     /// Called ONLY by PlacementRouter after plane placement.
-    public void PlaceAt(Transform anchor)
+   public void PlaceAt(Transform anchor)
     {
         Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] PlaceAt CALLED");
 
@@ -96,9 +96,6 @@ public class PaintingTarget : MonoBehaviour
             Debug.LogError($"[AR-MUSEUM][Painting:{targetKey}] Anchor is NULL");
             return;
         }
-
-        Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] Anchor name = {anchor.name}");
-        Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] Anchor position = {anchor.position}");
 
         if (isPlaced)
         {
@@ -115,46 +112,50 @@ public class PaintingTarget : MonoBehaviour
         Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] Instantiating prefab: {characterPrefab.name}");
 
         spawnedInstance = Instantiate(characterPrefab);
+        spawnedInstance.name = characterPrefab.name + "_Instance";
 
-        if (spawnedInstance == null)
-        {
-            Debug.LogError($"[AR-MUSEUM][Painting:{targetKey}] Instantiate FAILED");
-            return;
-        }
+        // 1️⃣ Parent FIRST (important for correct transforms)
+        spawnedInstance.transform.SetParent(anchor, false);
 
-        Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] Instance created: {spawnedInstance.name}");
-        Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] Instance active = {spawnedInstance.activeSelf}");
-
-        // Position at anchor (small lift for visibility)
-        spawnedInstance.transform.position = anchor.position + Vector3.up * 0.05f;
+        // 2️⃣ Reset local transform
+        spawnedInstance.transform.localPosition = Vector3.zero;
+        spawnedInstance.transform.localRotation = Quaternion.identity;
         spawnedInstance.transform.localScale = Vector3.one;
 
-        Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] Instance position set to {spawnedInstance.transform.position}");
-
-        // Face camera (Y only)
-        Camera cam = Camera.main;
-        if (cam == null)
+        // 3️⃣ Drop character so feet touch the ground
+        Renderer[] renderers = spawnedInstance.GetComponentsInChildren<Renderer>();
+        if (renderers.Length > 0)
         {
-            Debug.LogWarning($"[AR-MUSEUM][Painting:{targetKey}] Camera.main is NULL");
+            Bounds bounds = renderers[0].bounds;
+            foreach (var r in renderers)
+                bounds.Encapsulate(r.bounds);
+
+            float bottomY = bounds.min.y;
+            float offset = anchor.position.y - bottomY;
+
+            spawnedInstance.transform.position += Vector3.up * offset;
+
+            Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] Ground offset applied: {offset}");
         }
         else
+        {
+            Debug.LogWarning($"[AR-MUSEUM][Painting:{targetKey}] No Renderer found for grounding");
+        }
+
+        // 4️⃣ Face camera (Y only)
+        Camera cam = Camera.main;
+        if (cam != null)
         {
             Vector3 lookDir = cam.transform.position - spawnedInstance.transform.position;
             lookDir.y = 0f;
 
             if (lookDir.sqrMagnitude > 0.001f)
-            {
                 spawnedInstance.transform.rotation = Quaternion.LookRotation(lookDir);
-            }
         }
-
-        // Parent to anchor stage
-        spawnedInstance.transform.SetParent(anchor, true);
-
-        Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] Parent set to anchor");
 
         isPlaced = true;
 
         Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] Placement COMPLETE");
     }
+
 }
