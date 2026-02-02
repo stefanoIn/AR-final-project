@@ -3,7 +3,7 @@
     "m_SelectedProcess": {
         "deviceId": "R58NB1HP6CE",
         "name": "it.unige.ar.museum",
-        "processId": 22424,
+        "processId": 19257,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -162,6 +162,96 @@
             "deviceId": "R58NB1HP6CE",
             "name": "it.unige.ar.museum",
             "processId": 22424,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 30068,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 31355,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 312,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 1029,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 3036,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 4865,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 8187,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 9629,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 11461,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 12156,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 13671,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 15339,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 16650,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 17324,
+            "exited": false
+        },
+        {
+            "deviceId": "R58NB1HP6CE",
+            "name": "it.unige.ar.museum",
+            "processId": 19257,
             "exited": false
         }
     ],

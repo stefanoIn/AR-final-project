@@ -903,7 +903,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   mDisplayAdvanced: 1
-  mHitTestMode: 1
+  mHitTestMode: 0
 --- !u!114 &467769662
 MonoBehaviour:
   m_ObjectHideFlags: 0

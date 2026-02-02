@@ -12,24 +12,15 @@ public class PaintingTarget : MonoBehaviour
     private GameObject spawnedInstance;
     private bool isPlaced = false;
 
-    public bool IsPlaced => isPlaced;
+    // 🔒 Store final world transform
+    private Vector3 placedWorldPosition;
+    private Quaternion placedWorldRotation;
 
-    // =============================
-    // LIFECYCLE
-    // =============================
+    public bool IsPlaced => isPlaced;
 
     private void Awake()
     {
         Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] Awake");
-
-        if (string.IsNullOrEmpty(targetKey))
-            Debug.LogError("[AR-MUSEUM][Painting] targetKey is EMPTY");
-
-        if (characterPrefab == null)
-            Debug.LogError($"[AR-MUSEUM][Painting:{targetKey}] characterPrefab is NULL");
-
-        if (router == null)
-            Debug.LogError($"[AR-MUSEUM][Painting:{targetKey}] router reference is NULL");
     }
 
     // =============================
@@ -44,8 +35,13 @@ public class PaintingTarget : MonoBehaviour
 
         if (isPlaced && spawnedInstance != null)
         {
-            Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] Re-activating existing character");
             spawnedInstance.SetActive(true);
+
+            // 🔁 Restore saved transform
+            spawnedInstance.transform.position = placedWorldPosition;
+            spawnedInstance.transform.rotation = placedWorldRotation;
+
+            Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] Restored position {placedWorldPosition}");
         }
     }
 
@@ -63,7 +59,6 @@ public class PaintingTarget : MonoBehaviour
     // PLACEMENT
     // =============================
 
-    /// Called ONLY by PlacementRouter after plane placement
     public void PlaceAt(Transform anchor)
     {
         Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] PlaceAt CALLED");
@@ -75,57 +70,31 @@ public class PaintingTarget : MonoBehaviour
         spawnedInstance = Instantiate(characterPrefab);
         spawnedInstance.name = characterPrefab.name + "_Instance";
 
-        // Parent to anchor
+        // TEMPORARILY parent to anchor
         spawnedInstance.transform.SetParent(anchor, false);
-
-        // Reset local transform
         spawnedInstance.transform.localPosition = Vector3.zero;
         spawnedInstance.transform.localRotation = Quaternion.identity;
-        spawnedInstance.transform.localScale = Vector3.one;
 
-        // =============================
-        // 🔴 CORE FIX: CAMERA-RELATIVE → FLOOR-RELATIVE
-        // =============================
+        // 🔓 DETACH — critical fix
+        spawnedInstance.transform.SetParent(null, true);
 
-        float anchorY = anchor.position.y;
+        // Save final world transform
+        placedWorldPosition = spawnedInstance.transform.position;
+        placedWorldRotation = spawnedInstance.transform.rotation;
 
-        // Compensate for camera-relative ground plane
-        spawnedInstance.transform.position += Vector3.up * anchorY;
+        Debug.Log($"[AR-MUSEUM][Placement] Final world position: {placedWorldPosition}");
 
-        // =============================
-        // DEBUG LOGS (PLACEMENT)
-        // =============================
-
-        Debug.Log($"[AR-MUSEUM][Placement] Anchor world position: {anchor.position}");
-        Debug.Log($"[AR-MUSEUM][Placement] Character world position: {spawnedInstance.transform.position}");
-
-        // =============================
-        // OPTIONAL: Speech / Bubble debug
-        // =============================
-
-        Transform bubble = spawnedInstance.transform.Find("SpeechBubble");
-        if (bubble != null)
-        {
-            Debug.Log($"[AR-MUSEUM][Placement] Bubble world position: {bubble.position}");
-            Debug.Log($"[AR-MUSEUM][Placement] Bubble local position: {bubble.localPosition}");
-        }
-        else
-        {
-            Debug.LogWarning($"[AR-MUSEUM][Placement] No SpeechBubble found on {spawnedInstance.name}");
-        }
-
-        // =============================
         // Face camera (Y only)
-        // =============================
-
         Camera cam = Camera.main;
         if (cam != null)
         {
-            Vector3 dir = cam.transform.position - spawnedInstance.transform.position;
+            Vector3 dir = cam.transform.position - placedWorldPosition;
             dir.y = 0f;
 
             if (dir.sqrMagnitude > 0.001f)
                 spawnedInstance.transform.rotation = Quaternion.LookRotation(dir);
+
+            placedWorldRotation = spawnedInstance.transform.rotation;
         }
 
         isPlaced = true;
