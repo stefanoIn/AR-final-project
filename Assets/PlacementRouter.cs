@@ -1,5 +1,6 @@
 using UnityEngine;
 using Vuforia;
+using TMPro;
 
 public class PlacementRouter : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class PlacementRouter : MonoBehaviour
     public ContentPositioningBehaviour contentPositioning;
 
     [Header("UI")]
-    public TMPro.TextMeshProUGUI statusText;
+    public TextMeshProUGUI statusText;
 
     [Header("Floor Filtering")]
     [Range(0f, 1f)]
@@ -20,12 +21,12 @@ public class PlacementRouter : MonoBehaviour
     private void Awake()
     {
         Debug.Log("[AR-MUSEUM][Router] Awake");
+        HideStatus();
     }
 
     // =============================
     // UI
     // =============================
-
     public void ShowStatus(string message)
     {
         if (statusText == null) return;
@@ -44,28 +45,27 @@ public class PlacementRouter : MonoBehaviour
     // =============================
     // INPUT (tap fallback)
     // =============================
-
     public void LogTap(Vector2 screenPos)
     {
         if (currentTarget == null || currentTarget.IsPlaced)
             return;
 
         placementRequested = true;
+        ShowStatus("Placing guide…");
     }
 
     // =============================
     // AUTOMATIC PLACEMENT
     // =============================
-
     public void RequestAutomaticPlacement()
     {
         placementRequested = true;
+        ShowStatus("Looking for floor…");
     }
 
     // =============================
     // HIT TEST
     // =============================
-
     public void OnInteractiveHitTest(HitTestResult result)
     {
         if (!placementRequested || result == null || currentTarget == null)
@@ -78,7 +78,6 @@ public class PlacementRouter : MonoBehaviour
     // =============================
     // CONTENT PLACED
     // =============================
-
     public void OnContentPlaced(GameObject anchorStage)
     {
         if (anchorStage == null || currentTarget == null)
@@ -90,10 +89,11 @@ public class PlacementRouter : MonoBehaviour
         if (floorDot < floorUpThreshold)
         {
             Debug.Log("[AR-MUSEUM][FILTER] Rejected non-floor plane");
-            return; // KEEP TRYING
+            return; // keep searching
         }
 
         placementRequested = false;
+        HideStatus();
 
         Debug.Log("[AR-MUSEUM][CONTENT] Valid floor anchor");
 
@@ -104,7 +104,6 @@ public class PlacementRouter : MonoBehaviour
     // =============================
     // TARGET ROUTING
     // =============================
-
     public void SetCurrentTarget(PaintingTarget target)
     {
         currentTarget = target;
@@ -121,10 +120,7 @@ public class PlacementRouter : MonoBehaviour
         {
             currentTarget = null;
             placementRequested = false;
-
-            // Safety: never disable already placed guides
-            planeFinder.gameObject.SetActive(false);
+            HideStatus();
         }
     }
-
 }

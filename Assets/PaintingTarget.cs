@@ -30,34 +30,30 @@ public class PaintingTarget : MonoBehaviour
     // =============================
     // IMAGE TARGET EVENTS
     // =============================
+
     public void OnTargetFound()
     {
         Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] OnTargetFound");
 
-        // If already placed → just restore visibility, DO NOT re-route placement
+        // Already placed → just restore
         if (isPlaced && spawnedInstance != null)
         {
             spawnedInstance.SetActive(true);
             spawnedInstance.transform.position = placedWorldPosition;
             spawnedInstance.transform.rotation = placedWorldRotation;
-
-            Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] Restored position {placedWorldPosition}");
             return;
         }
 
-        // Only unplaced targets participate in placement routing
         router.SetCurrentTarget(this);
 
         autoPlacementRequested = true;
         router.RequestAutomaticPlacement();
+
         Invoke(nameof(AutoPlacementFallback), autoPlacementTimeout);
     }
 
-
     public void OnTargetLost()
     {
-        Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] OnTargetLost");
-
         if (isPlaced && spawnedInstance != null)
             spawnedInstance.SetActive(false);
 
@@ -68,10 +64,8 @@ public class PaintingTarget : MonoBehaviour
     {
         if (!isPlaced && autoPlacementRequested)
         {
-            Debug.LogWarning($"[AR-MUSEUM][Painting:{targetKey}] Auto placement failed — tap fallback");
-
             autoPlacementRequested = false;
-            router.ShowStatus("Tap to place guide");
+            router.ShowStatus("Automatic placement failed. Tap to place guide");
         }
     }
 
@@ -102,9 +96,7 @@ public class PaintingTarget : MonoBehaviour
         // Detach to freeze world transform
         spawnedInstance.transform.SetParent(null, true);
 
-        // -----------------------------
         // Orientation: wall + camera
-        // -----------------------------
         Vector3 wallNormal = transform.forward;
         Vector3 floorUp = anchor.up;
         Vector3 baseForward = -wallNormal;
