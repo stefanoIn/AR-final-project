@@ -161,11 +161,4 @@ This structure cleanly separates image tracking from ground placement logic.
 - TextMeshPro
 - C#
 
----
-
-## Author
-
-Stefano Infusini
-
-University project – Augmented Reality
 
