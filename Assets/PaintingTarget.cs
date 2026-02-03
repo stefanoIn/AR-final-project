@@ -9,12 +9,16 @@ public class PaintingTarget : MonoBehaviour
     [Header("References")]
     public PlacementRouter router;
 
+    [Header("Automatic Placement")]
+    public float autoPlacementTimeout = 1.5f;
+
     private GameObject spawnedInstance;
     private bool isPlaced = false;
 
-    // Store final world transform
     private Vector3 placedWorldPosition;
     private Quaternion placedWorldRotation;
+
+    private bool autoPlacementRequested = false;
 
     public bool IsPlaced => isPlaced;
 
@@ -26,24 +30,29 @@ public class PaintingTarget : MonoBehaviour
     // =============================
     // IMAGE TARGET EVENTS
     // =============================
-
     public void OnTargetFound()
     {
         Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] OnTargetFound");
 
-        router.SetCurrentTarget(this);
-
+        // If already placed → just restore visibility, DO NOT re-route placement
         if (isPlaced && spawnedInstance != null)
         {
             spawnedInstance.SetActive(true);
-
-            //  Restore saved transform
             spawnedInstance.transform.position = placedWorldPosition;
             spawnedInstance.transform.rotation = placedWorldRotation;
 
             Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] Restored position {placedWorldPosition}");
+            return;
         }
+
+        // Only unplaced targets participate in placement routing
+        router.SetCurrentTarget(this);
+
+        autoPlacementRequested = true;
+        router.RequestAutomaticPlacement();
+        Invoke(nameof(AutoPlacementFallback), autoPlacementTimeout);
     }
+
 
     public void OnTargetLost()
     {
@@ -55,77 +64,70 @@ public class PaintingTarget : MonoBehaviour
         router.ClearCurrentTarget(this);
     }
 
+    private void AutoPlacementFallback()
+    {
+        if (!isPlaced && autoPlacementRequested)
+        {
+            Debug.LogWarning($"[AR-MUSEUM][Painting:{targetKey}] Auto placement failed — tap fallback");
+
+            autoPlacementRequested = false;
+            router.ShowStatus("Tap to place guide");
+        }
+    }
+
     // =============================
     // PLACEMENT
     // =============================
 
     public void PlaceAt(Transform anchor)
     {
-        Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] PlaceAt CALLED");
-
         if (anchor == null || isPlaced)
             return;
 
-        // Instantiate
+        autoPlacementRequested = false;
+        CancelInvoke(nameof(AutoPlacementFallback));
+        router.HideStatus();
+
         spawnedInstance = Instantiate(characterPrefab);
         spawnedInstance.name = characterPrefab.name + "_Instance";
 
-        // TEMPORARILY parent to floor anchor
+        // Parent to floor anchor
         spawnedInstance.transform.SetParent(anchor, false);
         spawnedInstance.transform.localPosition = Vector3.zero;
         spawnedInstance.transform.localRotation = Quaternion.identity;
 
-        // Align character UP to the detected floor normal
+        // Feet aligned to floor
         spawnedInstance.transform.up = anchor.up;
 
         // Detach to freeze world transform
         spawnedInstance.transform.SetParent(null, true);
 
-        // =============================
-        // ORIENTATION: wall + camera
-        // =============================
-
-        // Wall normal comes from the ImageTarget (this script is on it)
+        // -----------------------------
+        // Orientation: wall + camera
+        // -----------------------------
         Vector3 wallNormal = transform.forward;
-
-        // True floor normal (use anchor, not Vector3.up)
         Vector3 floorUp = anchor.up;
+        Vector3 baseForward = -wallNormal;
 
-        // Base forward: perpendicular to the wall
-        Vector3 wallForward = -wallNormal;
-
-        Debug.Log($"[AR-MUSEUM][Placement] Wall forward: {wallForward}");
-        Debug.Log($"[AR-MUSEUM][Placement] Floor up: {floorUp}");
-        // Initial rotation: torso aligned to wall & floor
         spawnedInstance.transform.rotation =
-            Quaternion.LookRotation(wallForward, floorUp);
+            Quaternion.LookRotation(baseForward, floorUp);
 
-        // Rotate AROUND FLOOR to face the camera
         Camera cam = Camera.main;
         if (cam != null)
         {
             Vector3 toCamera = cam.transform.position - spawnedInstance.transform.position;
-
-            // Project camera direction onto the floor plane
             Vector3 flatDir = Vector3.ProjectOnPlane(toCamera, floorUp);
 
             if (flatDir.sqrMagnitude > 0.001f)
-            {
                 spawnedInstance.transform.rotation =
                     Quaternion.LookRotation(flatDir, floorUp);
-            }
         }
 
-        // Save final world transform
         placedWorldPosition = spawnedInstance.transform.position;
         placedWorldRotation = spawnedInstance.transform.rotation;
-
-        Debug.Log($"[AR-MUSEUM][Placement] Final world position: {placedWorldPosition}");
-        Debug.Log($"[AR-MUSEUM][Placement] Final world rotation: {placedWorldRotation.eulerAngles}");
 
         isPlaced = true;
 
         Debug.Log($"[AR-MUSEUM][Painting:{targetKey}] Placement COMPLETE");
     }
-
 }

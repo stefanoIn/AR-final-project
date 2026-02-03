@@ -7,6 +7,13 @@ public class PlacementRouter : MonoBehaviour
     public PlaneFinderBehaviour planeFinder;
     public ContentPositioningBehaviour contentPositioning;
 
+    [Header("UI")]
+    public TMPro.TextMeshProUGUI statusText;
+
+    [Header("Floor Filtering")]
+    [Range(0f, 1f)]
+    public float floorUpThreshold = 0.85f;
+
     private PaintingTarget currentTarget;
     private bool placementRequested = false;
 
@@ -16,16 +23,42 @@ public class PlacementRouter : MonoBehaviour
     }
 
     // =============================
-    // INPUT
+    // UI
+    // =============================
+
+    public void ShowStatus(string message)
+    {
+        if (statusText == null) return;
+
+        statusText.text = message;
+        statusText.gameObject.SetActive(true);
+    }
+
+    public void HideStatus()
+    {
+        if (statusText == null) return;
+
+        statusText.gameObject.SetActive(false);
+    }
+
+    // =============================
+    // INPUT (tap fallback)
     // =============================
 
     public void LogTap(Vector2 screenPos)
     {
-        Debug.Log($"[AR-MUSEUM][INPUT] Tap detected at {screenPos}");
-
         if (currentTarget == null || currentTarget.IsPlaced)
             return;
 
+        placementRequested = true;
+    }
+
+    // =============================
+    // AUTOMATIC PLACEMENT
+    // =============================
+
+    public void RequestAutomaticPlacement()
+    {
         placementRequested = true;
     }
 
@@ -38,9 +71,7 @@ public class PlacementRouter : MonoBehaviour
         if (!placementRequested || result == null || currentTarget == null)
             return;
 
-        placementRequested = false;
-
-        Debug.Log("[AR-MUSEUM][HIT] Positioning content");
+        Debug.Log("[AR-MUSEUM][HIT] Hit received");
         contentPositioning.PositionContentAtPlaneAnchor(result);
     }
 
@@ -53,11 +84,20 @@ public class PlacementRouter : MonoBehaviour
         if (anchorStage == null || currentTarget == null)
             return;
 
-        Debug.Log($"[AR-MUSEUM][CONTENT] Anchor at {anchorStage.transform.position}");
+        Vector3 planeUp = anchorStage.transform.up;
+        float floorDot = Vector3.Dot(planeUp, Vector3.up);
+
+        if (floorDot < floorUpThreshold)
+        {
+            Debug.Log("[AR-MUSEUM][FILTER] Rejected non-floor plane");
+            return; // KEEP TRYING
+        }
+
+        placementRequested = false;
+
+        Debug.Log("[AR-MUSEUM][CONTENT] Valid floor anchor");
 
         currentTarget.PlaceAt(anchorStage.transform);
-
-        // Disable PlaneFinder after placement
         planeFinder.gameObject.SetActive(false);
     }
 
@@ -72,7 +112,6 @@ public class PlacementRouter : MonoBehaviour
         if (!target.IsPlaced)
         {
             planeFinder.gameObject.SetActive(true);
-            Debug.Log("[AR-MUSEUM][Router] PlaneFinder ENABLED");
         }
     }
 
@@ -82,6 +121,10 @@ public class PlacementRouter : MonoBehaviour
         {
             currentTarget = null;
             placementRequested = false;
+
+            // Safety: never disable already placed guides
+            planeFinder.gameObject.SetActive(false);
         }
     }
+
 }
